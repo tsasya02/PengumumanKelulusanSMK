@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengumuman Kelulusan - SMK Cendikia Rancakalong 2025/2026</title>
+    <!-- Font Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        /* ========================
+           VARIABEL & RESET CSS
+        ======================== */
+        :root {
+            --navy: #0a192f;
+            --navy-light: #112240;
+            --gold: #d4af37;
+            --gold-hover: #b5952f;
+            --white: #ffffff;
+            --gray-light: #f4f7f6;
+            --text-dark: #333333;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--gray-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* ========================
+           GLOBAL STYLES & SPA LOGIC
+        ======================== */
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            flex: 1;
+            padding: 2rem 1rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1, h2, h3 { color: var(--navy); }
+        .text-center { text-align: center; }
+        
+        .btn {
+            background-color: var(--gold);
+            color: var(--navy);
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: var(--gold-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn:disabled {
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--navy);
+            color: var(--navy);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--navy);
+            color: var(--white);
+        }
+
+        /* ========================
+           HEADER & FOOTER
+        ======================== */
+        header {
+            background-color: var(--navy);
+            color: var(--white);
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header-logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .svg-icon {
+            width: 60px;
+            height: 60px;
+            fill: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background-color: var(--navy-light);
+            color: var(--white);
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+
+        /* ========================
+           HALAMAN 1: HOME
+        ======================== */
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            border-top: 4px solid var(--gold);
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            background: var(--navy);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .stat-item h3 { color: var(--gold); font-size: 1.8rem; }
+
+        /* Countdown */
+        .countdown-wrapper {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 2rem 0;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+        }
+
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .timer-box {
+            background: var(--navy);
+            color: var(--white);
+            min-width: 80px;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            border-bottom: 4px solid var(--gold);
+        }
+
+        .timer-box span:first-child { font-size: 2rem; font-weight: 700; }
+        .timer-box span:last-child { font-size: 0.8rem; color: var(--gold); }
+
+        /* ========================
+           HALAMAN 2: SAMBUTAN
+        ======================== */
+        .sambutan-content {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            line-height: 1.8;
+            text-align: justify;
+            margin-bottom: 2rem;
+        }
+
+        .ttd-container {
+            margin-top: 3rem;
+            text-align: right;
+        }
+
+        .ttd-img { max-width: 150px; margin: 1rem 0; }
+
+        /* ========================
+           HALAMAN 3: CEK KELULUSAN
+        ======================== */
+        .search-container {
+            background: var(--white);
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        /* Hasil Card */
+        .result-card {
+            display: none;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .result-card.show { display: block; animation: slideUp 0.5s ease; }
+
+        .status-badge {
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            color: var(--white);
+        }
+
+        .status-lulus { background-color: var(--success); }
+        .status-gagal { background-color: var(--danger); }
+        
+        .result-details {
+            margin: 2rem 0;
+            text-align: left;
+            background: var(--gray-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .result-details p { margin-bottom: 0.5rem; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
+        .result-details span { font-weight: 600; float: right; color: var(--navy); }
+
+        .alert-error {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .stat-grid { grid-template-columns: 1fr; }
+            .sambutan-content { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://drive.google.com/file/d/1xVs7yEyfcY4cf8lt4aMrzPFvYjKWdca-/view?usp=sharing" alt="Logo Sekolah" class="header-logo" onerror="this.style.display='none'">
+        <svg class="svg-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3L1 9L5 11.18V17.18L12 21L19 17.18V11.18L21 10.09V17H23V9L12 3ZM18.82 9L12 12.72L5.18 9L12 5.28L18.82 9ZM17 15.99L12 18.72L7 15.99V12.27L12 15L17 12.27V15.99Z"/>
+        </svg>
+        <h1>Pengumuman Kelulusan</h1>
+        <h2 style="color: var(--gold);">SMK Cendikia Rancakalong</h2>
+        <p>Tahun Ajaran 2025/2026</p>
+    </header>
+
+    <div id="app">
+        <!-- HALAMAN 1 -->
+        <section id="page-home" class="page active">
+            <div class="countdown-wrapper">
+                <h3>Waktu Menuju Pengumuman</h3>
+                <div class="timer" id="timer-display">
+                    <div class="timer-box"><span id="days">00</span><span>Hari</span></div>
+                    <div class="timer-box"><span id="hours">00</span><span>Jam</span></div>
+                    <div class="timer-box"><span id="minutes">00</span><span>Menit</span></div>
+                    <div class="timer-box"><span id="seconds">00</span><span>Detik</span></div>
+                </div>
+                <button id="btn-masuk" class="btn" disabled>PENGUMUMAN BELUM DIBUKA</button>
+            </div>
+
+            <div class="card-container">
+                <div class="card">
+                    <h3>🏫 Tentang Sekolah</h3>
+                    <p>SMK Cendikia Rancakalong berdedikasi mencetak generasi kompeten dan siap kerja.</p>
+                </div>
+                <div class="card">
+                    <h3>🎓 Program Keahlian</h3>
+                    <ul>
+                        <li>💻 TKJ (Teknik Komputer dan Jaringan)</li>
+                        <li>🏍️ TBSM (Teknik Bisnis dan Sepeda Motor)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="stat-grid">
+                <div class="stat-item"><h3>4 Mei</h3><p>Pengumuman</p></div>
+                <div class="stat-item"><h3>18</h3><p>Siswa Terdaftar</p></div>
+                <div class="stat-item"><h3>100%</h3><p>Integritas</p></div>
+            </div>
+        </section>
+
+        <!-- HALAMAN 2 -->
+        <section id="page-sambutan" class="page">
+            <h2 class="text-center">Sambutan Kepala Sekolah</h2>
+            <div class="sambutan-content">
+                <p>Dengan penuh rasa bangga dan syukur, kami mengucapkan selamat atas kelulusan siswa-siswi kelas XII jurusan TKJ dan XII TBSM Tahun Ajaran 2025/2026.</p>
+                <br>
+                <p>Perjalanan yang telah kalian tempuh bukanlah hal yang mudah. Kerja keras, disiplin, dan semangat belajar yang tinggi telah mengantarkan kalian pada titik ini. Kelulusan ini bukanlah akhir, melainkan awal dari langkah baru untuk meraih cita-cita yang lebih besar.</p>
+                <br>
+                <p>Kami berharap ilmu dan pengalaman yang telah diperoleh selama di SMK Cendikia Rancakalong dapat menjadi bekal berharga dalam menghadapi dunia kerja maupun melanjutkan pendidikan ke jenjang yang lebih tinggi.</p>
+                <br>
+                <p>Teruslah berkarya, jaga nama baik almamater, dan jadilah pribadi yang unggul, mandiri, serta berakhlak mulia.</p>
+                <br>
+                <p>Selamat dan sukses untuk masa depan kalian!🎊</p>
+                <div class="ttd-container">
+                    <p>Kepala Sekolah</p>
+                    <img src="https://www.google.com/imgres?q=placeholder%20signature&imgurl=https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F169%2F169284.png&imgrefurl=https%3A%2F%2Fwww.flaticon.com%2Ffree-icon%2Fsignature_169284&docid=z7gsrKf7dQQw6M&tbnid=WvM0cZBIs2tMoM&vet=12ahUKEwjLv73n5ZeUAxXOyzgGHW3pGp8QnPAOegQIJhAB..i&w=512&h=512&hcb=2&ved=2ahUKEwjLv73n5ZeUAxXOyzgGHW3pGp8QnPAOegQIJhAB" alt="TTD" class="ttd-img">
+                    <p><strong>Sukarya, S.Pd.</strong></p>
+                </div>
+            </div>
+            <div style="display:flex; justify-content:center; gap:10px;">
+                <button class="btn btn-outline" onclick="navigateTo('page-home')">Kembali</button>
+                <button class="btn" onclick="navigateTo('page-cek')">Cek Kelulusan</button>
+            </div>
+        </section>
+
+        <!-- HALAMAN 3 -->
+        <section id="page-cek" class="page">
+            <div class="search-container">
+                <h2>Portal Cek Kelulusan</h2>
+                <div class="input-group">
+                    <input type="text" id="input-nisn" placeholder="Masukkan NISN Anda">
+                    <button class="btn" onclick="cekKelulusan()">🔍 CEK KELULUSAN</button>
+                </div>
+                <div id="error-msg" class="alert-error">Data tidak ditemukan.</div>
+            </div>
+
+            <div id="result-card" class="result-card">
+                <h3>HASIL KELULUSAN</h3>
+                <div class="result-details">
+                    <p>Nama: <span id="res-nama">-</span></p>
+                    <p>NISN: <span id="res-nisn">-</span></p>
+                    <p>Kelas: <span id="res-jurusan">-</span></p>
+                </div>
+                <div id="res-status-badge" class="status-badge">STATUS</div>
+                <p id="res-message" style="margin-bottom:1.5rem;"></p>
+                <div style="display:flex; justify-content:center; gap:10px;">
+                    <a id="btn-download-skl" class="btn" href="#" target="_blank" style="display:none;">📄 DOWNLOAD SKL</a>
+                    <button class="btn btn-outline" onclick="resetForm()">Cek Lain</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; <span id="currentYear"></span> SMK Cendikia Rancakalong.</p>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').innerText = new Date().getFullYear();
+
+        // Database dari gambar yang diupload
+        const dataCSV = `Nama,NISN,Jurusan,Status,Link
+Dani Irwansyah,0072702563,XII TKJ,LULUS,https://drive.google.com/file/d/1PzoOyfhOSAHqmXq9TnlKoo-mB6oofJ75/view?usp=sharing
+Dika Cahyana,0086790436,XII TKJ,LULUS,https://drive.google.com/file/d/1W4uB6YiS6U4L7jBW7PgHmDOqu46K9rC2/view?usp=sharing
+GANGAN MARGHANA,0086777311,XII TKJ,LULUS,https://drive.google.com/file/d/1gsOa8KxVyJfkuWOPA3vKI2ylY1pz0tca/view?usp=sharing
+Hamdani Muhamad Rizki,0074505163,XII TKJ,LULUS,https://drive.google.com/file/d/18RhDinSHD7SXiTAyVhjgWO97M7EXkB0m/view?usp=sharing
+MOH REYHAN,0078350763,XII TKJ,LULUS,https://drive.google.com/file/d/1HLGwStqSxLxyIA1j5gSLz1TOygAnloN_/view?usp=sharing
+RAMDAN NUROHMAN,0073264965,XII TKJ,LULUS,https://drive.google.com/file/d/169m2g-TwMae4eAaTaKt7OO8_67NSll9l/view?usp=sharing
+Renita Aisya Putri,0072359462,XII TKJ,LULUS,https://drive.google.com/file/d/1aU2XdkQ3oWbrtLcCgWFQG8xFMtW8-Zk9/view?usp=sharing
+RISA AULIA PUTRI,0082011315,XII TKJ,LULUS,https://drive.google.com/file/d/1GqPz6Bf1_arKIGG2BTy98PaLDbqVQGV_/view?usp=sharing
+Sherly Citra Lestari,0079551641,XII TKJ,LULUS,https://drive.google.com/file/d/1sjgo2CXnmUOXHmoI4lTzhGIZQiUO65DK/view?usp=sharing
+Andi Jamaludin,0061974127,XII TBSM,LULUS,https://drive.google.com/file/d/1frsIshDNqdeMQwFUEOW3JVSTkm-ukSCN/view?usp=sharing
+Dede Agung Setiawan,0077824068,XII TBSM,LULUS,https://drive.google.com/file/d/1NrmG_Umou4gVpL8gYdsZE-4RbWg2B02a/view?usp=sharing
+Elisya Aprilianti,0071578086,XII TBSM,LULUS,https://drive.google.com/file/d/1eo-tV2w8isSRw2EQsw4td4KkpU0Z17kS/view?usp=sharing
+Herman Sopian,0086389800,XII TBSM,LULUS,https://drive.google.com/file/d/1RqZ2iqrnD9CaZclgFMQG_H6dwWR52Y-j/view?usp=sharing
+LOUIS REFI PERMANA,0075915882,XII TBSM,LULUS,https://drive.google.com/file/d/10bMZ6sVgM-VpkPKSBc2OU9Rqv00mZJuj/view?usp=sharing
+Muhamad Rizal Padilah,0083617894,XII TBSM,LULUS,https://drive.google.com/file/d/109GCHvJb02ZwDxLRcoTK-xxZ6WQqhK1A/view?usp=sharing
+Rangga,0074373649,XII TBSM,LULUS,https://drive.google.com/file/d/1XXMXvdUzr_4WMITunj2c1tXEBfQpEQDR/view?usp=sharing
+Riszky Maulana,0073445288,XII TBSM,LULUS,https://drive.google.com/file/d/13ZMUWfFR-gL3M8gFEV0n0pZOzu_v-vCc/view?usp=sharing
+Zaenal Arifin,0071995570,XII TBSM,LULUS,https://drive.google.com/file/d/1pSw5b6JVKx1eSvGNJPUK7wbpH3Eb2o9e/view?usp=sharing`;
+
+        function parseCSV(csv) {
+            const lines = csv.trim().split('\n');
+            const headers = lines[0].split(',');
+            return lines.slice(1).map(line => {
+                const values = line.split(',');
+                let obj = {};
+                headers.forEach((header, i) => obj[header.trim()] = values[i].trim());
+                return obj;
+            });
+        }
+
+        const studentsData = parseCSV(dataCSV);
+
+        function navigateTo(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        // Timer Logic
+        const targetDate = new Date("May 4, 2026 16:00:00").getTime();
+        const timerInt = setInterval(() => {
+            const now = new Date().getTime();
+            const dist = targetDate - now;
+            if(dist < 0) {
+                clearInterval(timerInt);
+                document.getElementById('timer-display').style.display = 'none';
+                const btn = document.getElementById('btn-masuk');
+                btn.disabled = false;
+                btn.innerText = "MASUK KE HALAMAN PENGUMUMAN";
+                btn.onclick = () => navigateTo('page-sambutan');
+            } else {
+                document.getElementById('days').innerText = Math.floor(dist / (1000*60*60*24));
+                document.getElementById('hours').innerText = Math.floor((dist % (1000*60*60*24)) / (1000*60*60));
+                document.getElementById('minutes').innerText = Math.floor((dist % (1000*60*60)) / (1000*60));
+                document.getElementById('seconds').innerText = Math.floor((dist % (1000*60)) / 1000);
+            }
+        }, 1000);
+
+        // Fungsi untuk merayakan kelulusan dengan konfeti
+        function celebrate() {
+            const duration = 5 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 50 * (timeLeft / duration);
+                // Karena konfeti akan turun, kita tembak dari sisi kiri dan kanan
+                confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+                confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+            }, 250);
+        }
+
+        function cekKelulusan() {
+            const nisn = document.getElementById('input-nisn').value;
+            const student = studentsData.find(s => s.NISN === nisn);
+            const err = document.getElementById('error-msg');
+            const res = document.getElementById('result-card');
+            
+            err.style.display = 'none';
+            res.classList.remove('show');
+
+            if(student) {
+                document.getElementById('res-nama').innerText = student.Nama;
+                document.getElementById('res-nisn').innerText = student.NISN;
+                document.getElementById('res-jurusan').innerText = student.Jurusan;
+                
+                const badge = document.getElementById('res-status-badge');
+                const btnSkl = document.getElementById('btn-download-skl');
+                badge.innerText = student.Status;
+                
+                if(student.Status === "LULUS") {
+                    badge.className = "status-badge status-lulus";
+                    document.getElementById('res-message').innerText = "Selamat! Silakan unduh SKL Anda.";
+                    btnSkl.href = student.Link;
+                    btnSkl.style.display = 'inline-flex';
+                    
+                    // Panggil fungsi perayaan
+                    celebrate();
+                } else {
+                    badge.className = "status-badge status-gagal";
+                    document.getElementById('res-message').innerText = "Tetap semangat dan jangan menyerah.";
+                    btnSkl.style.display = 'none';
+                }
+                res.classList.add('show');
+                document.querySelector('.search-container').style.display = 'none';
+            } else {
+                err.style.display = 'block';
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('input-nisn').value = "";
+            document.getElementById('result-card').classList.remove('show');
+            document.querySelector('.search-container').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
